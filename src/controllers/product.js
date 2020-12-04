@@ -40,28 +40,41 @@ const controller = {
                 if (!body.product_name || !body.product_category || !body.stock || !body.price) {
                     Failed(res, [], 'cannot empty')
                 } else {
-                    body.image = !req.file?'default.png':req.file.filename
+                    body.image = !req.file ? 'default.png' : req.file.filename
                     model.insert(body)
-                    .then((result) => {
-                        Success(res, result, 'Success insert product')
-                    })
-                    .catch((err) => {
-                        Failed(res, err, 'Internal server error')
-                    })
+                        .then((result) => {
+                            Success(res, result, 'Success insert product')
+                        })
+                        .catch((err) => {
+                            Failed(res, err, 'Internal server error')
+                        })
                 }
             }
         })
     },
     update: (req, res) => {
-        const id = req.params.id
-        const body = req.body
-        model.update(id, body)
-            .then((result) => {
-                Success(res, result, 'Success Update Data')
-            })
-            .catch((err) => {
-                Failed(res, [], err.message)
-            })
+        image.single('image')(req, res, (err) => {
+            if (err) {
+                console.log(err)
+            } else {
+                const id = req.params.id
+                const body = req.body
+                model.getByid(id) //check to model where id already exist
+                .then((check) => {
+                    const Oldimage = check[0].image
+                    body.image = !req.file?Oldimage:req.file.filename //jika tidak ada request file
+                })
+                // === CUT ===
+                
+                // model.update(id, body)
+                    // .then((result) => {
+                    //     Success(res, result, 'Success Update Data')
+                    // })
+                    // .catch((err) => {
+                    //     Failed(res, [], err.message)
+                    // })
+            }
+        })
     },
     delet: (req, res) => {
         const id = req.params.id
