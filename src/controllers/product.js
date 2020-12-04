@@ -41,28 +41,16 @@ const controller = {
                     Failed(res, [], 'cannot empty')
                 } else {
                     body.image = !req.file?'default.png':req.file.filename
-                    console.log(body)
+                    model.insert(body)
+                    .then((result) => {
+                        Success(res, result, 'Success insert product')
+                    })
+                    .catch((err) => {
+                        Failed(res, err, 'Internal server error')
+                    })
                 }
             }
         })
-
-        // image.single('image')(req, res, (err) => {
-        //     const body = req.body
-        //     body.image = !req.file ? 'default.png' : req.file.filename
-        //     console.log(body)
-        // })
-
-        // if (!body.product_name || !body.product_category || !body.stock || !body.price) {
-        //     Failed(res, [], 'cannot empty')
-        // } else {
-        //     model.insert(body)
-        //     .then((result) => {
-        //         Success(res, result, 'Success Insert Data')
-        //     })
-        //     .catch((err) => {
-        //         Failed(res, [], err.message)
-        //     })
-        // }
     },
     update: (req, res) => {
         const id = req.params.id
