@@ -11,6 +11,40 @@ const model = {
                 }
             })
         })
+    },
+    getByid: (id) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT * FROM product WHERE product_id = ?`, id, (err, result) => {
+                if (err) {
+                    reject(new Error(err))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+    insert: (data) => {
+        return new Promise((resolve, reject) => {
+            db.query(`INSERT INTO product (product_name, product_category, stock, price)
+            VALUES ('${data.product_name}','${data.product_category}','${data.stock}','${data.price}')`, (err, result) => {
+                if (err) {
+                    reject(new Error(err))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+    update: (id, data) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE product SET ? WHERE product_id = ?`, [data, id], (err, result) => {
+                if (err) {
+                    reject(new Error(err))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
     }
 }
 
