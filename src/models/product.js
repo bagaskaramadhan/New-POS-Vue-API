@@ -25,8 +25,8 @@ const model = {
     },
     insert: (data) => {
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO product (product_name, product_category, stock, price)
-            VALUES ('${data.product_name}','${data.product_category}','${data.stock}','${data.price}')`, (err, result) => {
+            db.query(`INSERT INTO product (product_name, product_category, stock, price, image)
+            VALUES ('${data.product_name}','${data.product_category}','${data.stock}','${data.price}', '${data.image}')`, (err, result) => {
                 if (err) {
                     reject(new Error(err))
                 } else {
