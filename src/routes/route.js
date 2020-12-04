@@ -7,5 +7,6 @@ route
     .get('/books/getByid/:id', controller.getByid)
     .post('/books/insert', controller.insert)
     .patch('/books/update/:id', controller.update)
+    .delete('/books/delete/:id', controller.delet)
 
 module.exports = route

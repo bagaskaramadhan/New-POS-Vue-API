@@ -40,6 +40,16 @@ const controller = {
             .catch((err) => {
                 console.log(err)
             })
+    },
+    delet: (req, res) => {
+        const id = req.params.id
+        model.delet(id)
+            .then((result) => {
+                res.json(result)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 }
 

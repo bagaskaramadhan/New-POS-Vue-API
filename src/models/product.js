@@ -45,6 +45,17 @@ const model = {
                 }
             })
         })
+    },
+    delet: (id) => {
+        return new Promise((resolve, reject) => {
+            db.query(`DELETE FROM product WHERE product_id = ?`, id, (err, result) => {
+                if (err) {
+                    reject(new Error(err))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
     }
 }
 
