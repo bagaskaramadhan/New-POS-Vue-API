@@ -1,6 +1,7 @@
 const model = require('../models/product')
 const { Success, NOT, Failed } = require('../helpers/response')
 const image = require('../helpers/upload')
+const fs = require('fs')
 const controller = {
     getAll: (req, res) => {
         model.getAll()
@@ -62,7 +63,19 @@ const controller = {
                 model.getByid(id) //check to model where id already exist
                 .then((check) => {
                     const Oldimage = check[0].image
-                    body.image = !req.file?Oldimage:req.file.filename //jika tidak ada request file
+                    body.image = !req.file?Oldimage:req.file.filename //jika tidak ada request file maka Oldimage
+                    if (body.image !== Oldimage) { // jika ganti image maka masuk ke kondisi bawah
+                        if (Oldimage !== 'default.png') { // jika imagenya lama bukan default
+                            fs.unlink(`src/uploads/${Oldimage}`)
+                            model.update(body, id)
+                            .then((result) => {
+                                console.log(result)
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                        }
+                    }
                 })
                 // === CUT ===
                 
