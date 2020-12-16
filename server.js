@@ -6,6 +6,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 server.use(cors())
+server.use(express.static('./src/uploads'))
 server.use(bodyParser.urlencoded({ extended: false }))
 server.use(bodyParser.json())
 server.use('/', router)
