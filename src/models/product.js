@@ -3,7 +3,10 @@ const db = require('../configs/db')
 const model = {
     getAll: () => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT * FROM product`, (err, result) => {
+            db.query(`SELECT 
+            product.product_id, product.product_name, category.category_name, product.stock, product.price, product.image
+            FROM product INNER JOIN category
+            ON category.category_id = product.product_category`, (err, result) => {
                 if (err) {
                     reject(new Error(err))
                 } else {
@@ -12,9 +15,14 @@ const model = {
             })
         })
     },
+    
     getByid: (id) => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT * FROM product WHERE product_id = ?`, id, (err, result) => {
+            db.query(`SELECT 
+            product.product_id, product.product_name, category.category_name, product.stock, product.price, product.image
+            FROM product INNER JOIN category
+            ON category.category_id = product.product_category
+            WHERE product_id = ?`, id, (err, result) => {
                 if (err) {
                     reject(new Error(err))
                 } else {
@@ -23,6 +31,7 @@ const model = {
             })
         })
     },
+
     insert: (data) => {
         return new Promise((resolve, reject) => {
             db.query(`INSERT INTO product (product_name, product_category, stock, price, image)
@@ -35,6 +44,7 @@ const model = {
             })
         })
     },
+
     update: (id, data) => {
         return new Promise((resolve, reject) => {
             db.query(`UPDATE product SET ? WHERE product_id = ?`, [data, id], (err, result) => {
@@ -46,6 +56,7 @@ const model = {
             })
         })
     },
+
     delet: (id) => {
         return new Promise((resolve, reject) => {
             db.query(`DELETE FROM product WHERE product_id = ?`, id, (err, result) => {

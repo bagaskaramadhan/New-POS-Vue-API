@@ -12,6 +12,7 @@ const controller = {
                 Failed(res, [], err.message)
             })
     },
+
     getByid: (req, res) => {
         const id = req.params.id
         model.getByid(id)
@@ -27,8 +28,8 @@ const controller = {
                 Failed(res, [], err.message)
             })
     },
-    insert: (req, res) => {
 
+    insert: (req, res) => {
         image.single('image')(req, res, (err) => {
             if (err) {
                 if (err.code === 'LIMIT_FILE_SIZE') {
@@ -47,12 +48,13 @@ const controller = {
                             Success(res, result, 'Success insert product')
                         })
                         .catch((err) => {
-                            Failed(res, err, 'Internal server error')
+                            console.log(err)
                         })
                 }
             }
         })
     },
+
     update: (req, res) => {
         image.single('image')(req, res, (err) => {
             if (err) {
@@ -105,6 +107,7 @@ const controller = {
             }
         })
     },
+
     delet: (req, res) => {
         const id = req.params.id
         model.delet(id)
