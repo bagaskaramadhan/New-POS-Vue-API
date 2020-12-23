@@ -4,7 +4,13 @@ const image = require('../helpers/upload')
 const fs = require('fs')
 const controller = {
     getAll: (req, res) => {
-        model.getAll()
+        const field = !req.query.field ? 'product_id' : req.query.field
+        const order = !req.query.order ? 'ASC' : req.query.order
+        const name = !req.query.name ? "" : req.query.name
+        const limit = !req.query.limit ? 5 : parseInt(req.query.limit)
+        const page = !req.query.page ? 1 : parseInt(req.query.page)
+        const offset = page === 1 ? 0 : (page - 1) * limit
+        model.getAll(name, limit, offset, field, order)
             .then((result) => {
                 Success(res, result, 'Success Get All')
             })
@@ -48,7 +54,7 @@ const controller = {
                             Success(res, result, 'Success insert product')
                         })
                         .catch((err) => {
-                            console.log(err)
+                            Failed(res, err, 'Internal server error')
                         })
                 }
             }

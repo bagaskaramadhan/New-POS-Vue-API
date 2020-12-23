@@ -1,34 +1,39 @@
 const db = require('../configs/db')
 
 const model = {
-    getAll: () => {
+    getAll: (name, limit, offset, field, order) => {
         return new Promise((resolve, reject) => {
             db.query(`SELECT 
             product.product_id, product.product_name, category.category_name, product.stock, product.price, product.image
             FROM product INNER JOIN category
-            ON category.category_id = product.product_category`, (err, result) => {
-                if (err) {
-                    reject(new Error(err))
-                } else {
-                    resolve(result)
-                }
-            })
+            ON category.category_id = product.product_category
+            WHERE product_name LIKE '%${name}%'
+            ORDER BY ${field} ${order}
+            LIMIT ${offset}, ${limit}`
+                , (err, result) => {
+                    if (err) {
+                        reject(new Error(err))
+                    } else {
+                        resolve(result)
+                    }
+                })
         })
     },
-    
+
     getByid: (id) => {
         return new Promise((resolve, reject) => {
             db.query(`SELECT 
             product.product_id, product.product_name, category.category_name, product.stock, product.price, product.image
             FROM product INNER JOIN category
             ON category.category_id = product.product_category
-            WHERE product_id = ?`, id, (err, result) => {
-                if (err) {
-                    reject(new Error(err))
-                } else {
-                    resolve(result)
-                }
-            })
+            WHERE product_id = ?`
+                , id, (err, result) => {
+                    if (err) {
+                        reject(new Error(err))
+                    } else {
+                        resolve(result)
+                    }
+                })
         })
     },
 
