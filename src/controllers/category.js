@@ -1,14 +1,14 @@
 const { json } = require('body-parser')
 const model = require('../models/category')
-
+const { Success, NOT, Failed } = require('../helpers/response')
 const controller = {
     getAllCategory: (req, res) => {
         model.getAllCategory()
             .then((result) => {
-                res.json(result)
+                Success(res, result, 'Success get all category')
             })
-            .catch(err => {
-                console.log(err)
+            .catch((err) => {
+                Failed(res, [], err.message)
             })
     }
 }
