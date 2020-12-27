@@ -5,7 +5,7 @@ const controller = {
     getAllCategory: (req, res) => {
         model.getAllCategory()
             .then((result) => {
-                Success(res, result, 'Success get all category')
+                Success(res, result, 'Success get All category')
             })
             .catch((err) => {
                 Failed(res, [], err.message)
