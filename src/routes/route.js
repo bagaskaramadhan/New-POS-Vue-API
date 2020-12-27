@@ -1,12 +1,16 @@
 const express = require('express')
 const route = express.Router()
-const controller = require('../controllers/product')
+const { getAll, getByid, insert, update, delet } = require('../controllers/product')
+const { getAllCategory } = require('../controllers/category')
 
 route
-    .get('/books/getAll', controller.getAll)
-    .get('/books/getByid/:id', controller.getByid)
-    .post('/books/insert', controller.insert)
-    .patch('/books/update/:id', controller.update)
-    .delete('/books/delete/:id', controller.delet)
+    // PRODUCT
+    .get('/books/getAll', getAll)
+    .get('/books/getByid/:id', getByid)
+    .post('/books/insert', insert)
+    .patch('/books/update/:id', update)
+    .delete('/books/delete/:id', delet)
+    // CATEGORY
+    .get('/category/getAll', getAllCategory)
 
 module.exports = route
