@@ -10,7 +10,7 @@ route
     .post('/books/insert', insert)
     .patch('/books/update/:id', update)
     .delete('/books/delete/:id', delet)
-    // CATEGORY
+    // CATEGORY's
     .get('/category/getAll', getAllCategory)
 
 module.exports = route
