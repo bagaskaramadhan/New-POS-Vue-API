@@ -8,14 +8,29 @@ const controller = {
         if (!data.username || !data.email || !data.password) {
             Failed(res, [], 'cannot empty!')
         } else {
-            model.register(data)
+            model.userCheck(data.email)
                 .then((result) => {
-                    Success(res, result, 'Success register')
+                    if (result.length === 0) {
+                        Failed(res, [], 'username/email has been taken')
+                        console.log(result)
+                    } else {
+                        Success(res, result, 'OK')
+                    }
                 })
                 .catch((err) => {
                     Failed(res, [], err.message)
                 })
         }
+    },
+    userCheck: (req, res) => {
+        const data = req.body
+        model.userCheck(data)
+            .then((result) => {
+                Success(res, result, 'Success get data')
+            })
+            .catch((err) => {
+                Failed(res, [], err.message)
+            })
     }
 }
 
