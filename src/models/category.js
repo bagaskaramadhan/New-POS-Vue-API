@@ -26,9 +26,21 @@ const model = {
         })
     },
 
-    updateCategory: (id, data)=>{
-        return new Promise((resolve, reject)=>{
-            db.query(`UPDATE category SET ? WHERE category_id = ?`, [data, id], (err, result)=>{
+    updateCategory: (id, data) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE category SET ? WHERE category_id = ?`, [data, id], (err, result) => {
+                if (err) {
+                    reject(new Error(err))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
+    deleteCategory: (id) => {
+        return new Promise((resolve, reject) => {
+            db.query(`DELETE FROM category WHERE category_id = ?`, id, (err, result) => {
                 if (err) {
                     reject(new Error(err))
                 } else {

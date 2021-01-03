@@ -40,6 +40,17 @@ const controller = {
                     Failed(res, [], err.message)
                 })
         }
+    },
+
+    deleteCategory: (req, res) => {
+        const id = req.params.id
+        model.deleteCategory(id)
+            .then((result) => {
+                Success(res, result, 'Success delete category')
+            })
+            .catch((err) => {
+                Failed(res, [], err.message)
+            })
     }
 }
 
