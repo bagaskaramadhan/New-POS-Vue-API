@@ -1,7 +1,7 @@
 const express = require('express')
 const route = express.Router()
 const { getAll, getByid, insert, update, delet } = require('../controllers/product')
-const { getAllCategory, insertCategory } = require('../controllers/category')
+const { getAllCategory, insertCategory, updateCategory } = require('../controllers/category')
 
 route
     // PRODUCT
@@ -13,5 +13,6 @@ route
     // CATEGORY
     .get('/category/getAll', getAllCategory)
     .post('/category/insert', insertCategory)
+    .patch('/category/update/:id', updateCategory)
 
 module.exports = route

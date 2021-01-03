@@ -24,6 +24,22 @@ const controller = {
                     Failed(res, [], err.message)
                 })
         }
+    },
+
+    updateCategory: (req, res) => {
+        const id = req.params.id
+        const data = req.body
+        if (!data.category_name) {
+            Failed(res, [], 'Cannot empty')
+        } else {
+            model.updateCategory(id, data)
+                .then((result) => {
+                    Success(res, result, 'Success update category')
+                })
+                .catch((err) => {
+                    Failed(res, [], err.message)
+                })
+        }
     }
 }
 
