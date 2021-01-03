@@ -1,21 +1,22 @@
 const model = require('../models/users')
 const { Failed, Success } = require('../helpers/response')
+const bcrypt = require('bcrypt')
 
 const controller = {
     register: (req, res) => {
-        const data = req.body
-        data.fullname = data.username
-        if (!data.username || !data.email || !data.password) {
+        const dataBody = req.body
+        if (!dataBody.username || !dataBody.fullname || !dataBody.email || !dataBody.password) {
             Failed(res, [], 'cannot empty!')
         } else {
-            model.userCheck(data.email)
+            const data = {
+                fullname: dataBody.fullname,
+                email: dataBody.email.toLowerCase(),
+                username: dataBody.username.toLowerCase(),
+                password: bcrypt.hashSync(dataBody.password, 10)
+            }
+            model.register(data)
                 .then((result) => {
-                    if (result.length === 0) {
-                        Failed(res, [], 'username/email has been taken')
-                        console.log(result)
-                    } else {
-                        Success(res, result, 'OK')
-                    }
+                    Success(res, result, 'Register success')
                 })
                 .catch((err) => {
                     Failed(res, [], err.message)

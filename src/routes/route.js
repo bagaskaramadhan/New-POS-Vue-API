@@ -2,7 +2,7 @@ const express = require('express')
 const route = express.Router()
 const { getAll, getByid, insert, update, delet } = require('../controllers/product')
 const { getAllCategory, insertCategory, updateCategory, deleteCategory } = require('../controllers/category')
-const { register, userCheck } = require('../controllers/users')
+const { register } = require('../controllers/users')
 route
     // PRODUCT
     .get('/product/getAll', getAll)
@@ -17,6 +17,6 @@ route
     .delete('/category/delete/:id', deleteCategory)
     // USERS
     .post('/users/register', register)
-    .get('/users/check', userCheck)
+    // .get('/users/check', userCheck)
 
 module.exports = route
