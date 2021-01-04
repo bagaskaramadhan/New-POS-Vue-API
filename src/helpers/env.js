@@ -5,5 +5,6 @@ module.exports = {
     USER: process.env.DBUSER,
     HOST: process.env.DBHOST,
     PASS: process.env.DBPASS,
-    NAME: process.env.DBNAME
+    NAME: process.env.DBNAME,
+    JWTREGIS: process.env.REGISTER
 }

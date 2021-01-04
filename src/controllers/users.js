@@ -1,7 +1,8 @@
 const model = require('../models/users')
 const { Failed, Success } = require('../helpers/response')
 const bcrypt = require('bcrypt')
-
+const jwt = require('jsonwebtoken')
+const { JWTREGIS } = require('../helpers/env')
 const controller = {
     register: (req, res) => {
         const body = req.body
@@ -15,44 +16,43 @@ const controller = {
                 username: body.username.toLowerCase(),
                 password: bcrypt.hashSync(body.password, salt)
             }
-            //   jwt.sign({ data: data.email }, JWTREGISTER, (err, response) => {
-            // if (err) {
-            //   Failed(res, [], err.message)
-            //   console.log(err.message)
-            // } else {
-            model.userCheck(data.email, data.username)
-                .then((result) => {
-                    if (result.length === 0) {
-                        const sendData = {
-                            fullname: data.fullname,
-                            email: data.email,
-                            username: data.username,
-                            password: data.password,
-                            //   token: response
-                        }
-                        if (sendData.username.length > 20) {
-                            Failed(res, [], 'Username must be 5-20 characters')
-                        } else {
-                            model.register(sendData)
-                                .then((results) => {
-                                    // sendMail(sendData.email, sendData.token)
-                                    Success(res, results, 'Register success!')
-                                })
-                                .catch((err) => {
-                                    Failed(res, [], err.message)
-                                })
-                        }
-
-                    } else {
-                        Failed(res, [], 'Email or username has been taken')
-                    }
-                })
-                .catch((err) => {
+            jwt.sign({ data: data.email }, JWTREGIS, (err, response) => {
+                if (err) {
                     Failed(res, [], err.message)
-                })
+                } else {
+                    model.userCheck(data.email, data.username)
+                        .then((result) => {
+                            if (result.length === 0) {
+                                const sendData = {
+                                    fullname: data.fullname,
+                                    email: data.email,
+                                    username: data.username,
+                                    password: data.password,
+                                    token: response
+                                }
+                                if (sendData.username.length > 20) {
+                                    Failed(res, [], 'Username must be 5-20 characters')
+                                } else {
+                                    model.register(sendData)
+                                        .then((results) => {
+                                            // sendMail(sendData.email, sendData.token)
+                                            Success(res, results, 'Register success!')
+                                        })
+                                        .catch((err) => {
+                                            Failed(res, [], err.message)
+                                        })
+                                }
+
+                            } else {
+                                Failed(res, [], 'Email or username has been taken')
+                            }
+                        })
+                        .catch((err) => {
+                            Failed(res, [], err.message)
+                        })
+                }
+            })
         }
-        //   });
-        // }
     },
 
     getUsers: (req, res) => {
