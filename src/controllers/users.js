@@ -2,12 +2,13 @@ const model = require('../models/users')
 const { Failed, Success } = require('../helpers/response')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const { JWTREGIS } = require('../helpers/env')
+const { SCRT } = require('../helpers/env')
+
 const controller = {
     register: (req, res) => {
         const body = req.body
         if (!body.fullname || !body.username || !body.email || !body.password) {
-            Failed(res, [], 'Name, email or password is required!')
+            Failed(res, [], 'cannot empty')
         } else {
             const salt = bcrypt.genSaltSync(10)
             const data = {
@@ -16,7 +17,7 @@ const controller = {
                 username: body.username.toLowerCase(),
                 password: bcrypt.hashSync(body.password, salt)
             }
-            jwt.sign({ data: data.email }, JWTREGIS, (err, response) => {
+            jwt.sign({ email: data.email, username: data.username }, SCRT, (err, response) => {
                 if (err) {
                     Failed(res, [], err.message)
                 } else {
@@ -53,6 +54,29 @@ const controller = {
                 }
             })
         }
+    },
+
+    login: (req, res) => {
+        const data = req.body
+        const user = {
+            username: data.username.toLowerCase(),
+            password: data.password
+        }
+        model.login(user)
+            .then((result) => {
+                const results = result[0]
+                if (!results) {
+                    Failed(res, [], 'username not registered')
+                } else {
+                    const password = results.password
+                    const isMatch = bcrypt.compareSync(data.password, password)
+                    if (!isMatch) {
+                        Failed(res, [], 'wrong password')
+                    } else {
+                        Success(res, results, 'Login success')
+                    }
+                }
+            })
     },
 
     getUsers: (req, res) => {
