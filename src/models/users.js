@@ -14,10 +14,22 @@ const model = {
         })
     },
 
-    userCheck: (email) => {
+    userCheck: (email, username) => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT * from users where email = '${email}'`, (err, result) => {
+            db.query(`SELECT * FROM users WHERE email = '${email}' OR username = '${username}'`, (err, result) => {
                 err ? reject(new Error(err)) : resolve(result)
+            })
+        })
+    },
+
+    getUsers: () => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT * FROM users`, (err, result) => {
+                if (err) {
+                    reject(new Error(err))
+                } else {
+                    resolve(result)
+                }
             })
         })
     }

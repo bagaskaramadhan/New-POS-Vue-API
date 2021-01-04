@@ -8,20 +8,19 @@ const controller = {
         if (!body.fullname || !body.username || !body.email || !body.password) {
             Failed(res, [], 'Name, email or password is required!')
         } else {
-            const fullname = body.fullname
-            const nameSplit = fullname.split(' ')
+            const salt = bcrypt.genSaltSync(10)
             const data = {
                 fullname: body.fullname,
                 email: body.email.toLowerCase(),
-                username: nameSplit.join(' '),
-                password: bcrypt.hashSync(body.password, 10)
+                username: body.username.toLowerCase(),
+                password: bcrypt.hashSync(body.password, salt)
             }
             //   jwt.sign({ data: data.email }, JWTREGISTER, (err, response) => {
             // if (err) {
             //   Failed(res, [], err.message)
             //   console.log(err.message)
             // } else {
-            model.userCheck(data.email)
+            model.userCheck(data.email, data.username)
                 .then((result) => {
                     if (result.length === 0) {
                         const sendData = {
@@ -31,16 +30,21 @@ const controller = {
                             password: data.password,
                             //   token: response
                         }
-                        model.register(sendData)
-                            .then((results) => {
-                                // sendMail(sendData.email, sendData.token)
-                                success(res, results, 'Register success!')
-                            })
-                            .catch((err) => {
-                                Failed(res, [], err.message)
-                            })
+                        if (sendData.username.length > 20) {
+                            Failed(res, [], 'Username must be 5-20 characters')
+                        } else {
+                            model.register(sendData)
+                                .then((results) => {
+                                    // sendMail(sendData.email, sendData.token)
+                                    Success(res, results, 'Register success!')
+                                })
+                                .catch((err) => {
+                                    Failed(res, [], err.message)
+                                })
+                        }
+
                     } else {
-                        Failed(res, [], 'Email is already registered!')
+                        Failed(res, [], 'Email or username has been taken')
                     }
                 })
                 .catch((err) => {
@@ -49,6 +53,16 @@ const controller = {
         }
         //   });
         // }
+    },
+
+    getUsers: (req, res) => {
+        model.getUsers()
+            .then((result) => {
+                Success(res, result, 'All user')
+            })
+            .catch((err) => {
+                Failed(res, [], err.message)
+            })
     }
 }
 
