@@ -3,6 +3,8 @@ const { Failed, Success } = require('../helpers/response')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { SCRT } = require('../helpers/env')
+const sendMail = require('../helpers/mail')
+
 
 const controller = {
     register: (req, res) => {
@@ -36,7 +38,7 @@ const controller = {
                                 } else {
                                     model.register(sendData)
                                         .then((results) => {
-                                            // sendMail(sendData.email, sendData.token)
+                                            sendMail(sendData.email, sendData.token)
                                             Success(res, results, 'Register success!')
                                         })
                                         .catch((err) => {
@@ -72,11 +74,33 @@ const controller = {
                     const isMatch = bcrypt.compareSync(data.password, password)
                     if (!isMatch) {
                         Failed(res, [], 'wrong password')
+                    } else if (results.is_active === 0) {
+                        Failed(res, [], 'activation first')
                     } else {
                         Success(res, results, 'Login success')
                     }
                 }
             })
+    },
+
+    verify: (req, res) => {
+        const token = req.params.token
+        jwt.verify(token, SCRT, (err, decode) => {
+            if (err) {
+                Failed(res, [], 'Failed Auth!')
+            } else {
+                const data = jwt.decode(token)
+                const email = data.email
+                model.activation(email)
+                    .then(() => {
+                        // res.render('index', { email })
+                        // console.log('ok')
+                        res.json({ msg: 'oke' })
+                    }).catch(err => {
+                        Failed(res, [], err.message)
+                    })
+            }
+        })
     },
 
     getUsers: (req, res) => {

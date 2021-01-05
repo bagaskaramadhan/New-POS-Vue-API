@@ -6,5 +6,8 @@ module.exports = {
     HOST: process.env.DBHOST,
     PASS: process.env.DBPASS,
     NAME: process.env.DBNAME,
+    USEREMAIL: process.env.USEREMAIL,
+    USERPASS: process.env.USERPASS,
+    HOSTURL: process.env.HOSTURL,
     SCRT: process.env.SECRET
 }
