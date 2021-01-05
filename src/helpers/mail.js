@@ -40,7 +40,7 @@ const sendMail = (email, token) => {
     });
 
     let Mail = {
-        from: '"Telegram Team" <app_chat.com>',
+        from: '"Verification Email" <app_chat.com>',
         to: email,
         subject: "Verification Email",
         text: "Plaintext version of the message",

@@ -45,7 +45,6 @@ const controller = {
                                             Failed(res, [], err.message)
                                         })
                                 }
-
                             } else {
                                 Failed(res, [], 'Email or username has been taken')
                             }
@@ -93,9 +92,7 @@ const controller = {
                 const email = data.email
                 model.activation(email)
                     .then(() => {
-                        // res.render('index', { email })
-                        // console.log('ok')
-                        res.json({ msg: 'oke' })
+                        res.render('index', { email })
                     }).catch(err => {
                         Failed(res, [], err.message)
                     })
