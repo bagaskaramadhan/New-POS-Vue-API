@@ -2,6 +2,4 @@
 
 ## POSTMAN Collection
 
-[Point Of Sales API](https://www.getpostman.com/collections/49b893a1515f73f34576)
-
-Dedicated for learning Point of Sales
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/49b893a1515f73f34576)
