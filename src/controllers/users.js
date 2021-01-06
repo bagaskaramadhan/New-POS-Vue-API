@@ -33,7 +33,7 @@ const controller = {
                                     password: data.password,
                                     token: response
                                 }
-                                if (sendData.username.length > 20) {
+                                if (sendData.username.length > 20 || sendData.username.length < 5) {
                                     Failed(res, [], 'Username must be 5-20 characters')
                                 } else {
                                     model.register(sendData)
